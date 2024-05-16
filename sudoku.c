@@ -104,18 +104,20 @@ int is_valid(Node* n){
 List* get_adj_nodes(Node* n)
 {
    List* list=createList();
+   int primeraCasilla = 0; 
    int i,j;
    for(i=0;i<9;i++)
    {
       for(j= 0;j<9;j++)
       {
-         if(n->sudo[i][j]==0)
+         if(n->sudo[i][j]==0 && primeraCasilla==0)
          {
+            primeraCasilla = 1;
             for(int k = 1; k < 10; k++)
             {
                Node* aux=copy(n);
                aux->sudo[i][j] = k;
-               if(is_valid(aux))
+               if(is_valid(aux) && primeraCasilla == 1)
                {
                   pushBack(list,aux);
                }
