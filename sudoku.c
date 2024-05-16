@@ -44,42 +44,61 @@ void print_node(Node* n){
 }
 
 int is_valid(Node* n){
-    int row_check[9][9] = {0};
-    int col_check[9][9] = {0};
-    int submatrix_check[3][3] = {0};
-
-    for(int k = 0; k < 9; k++)
-    {
-        for(int p=0; p<9; p++)
-        {
-            int i = 3*(k/3) + (p/3);
-            int j = 3*(k%3) + (p%3);
-            int num = n->sudo[i][j] - 1;
-
-            // Verificar filas
-            if (row_check[i][num] == 1) {
-                return 0; // Número repetido en la misma fila
+   int i,j;
+   for(i = 0; i < 9; i++)
+   {
+      int* arregloBinarioCol = calloc(9, sizeof(int));
+      int* arregloBinarioFil = calloc(9, sizeof(int));
+      int* arregloBinarioSub = calloc(9, sizeof(int));
+      for(j = 0; j < 9; j++)
+      {
+         int numeroFil = n->sudo[i][j];
+         int numeroCol = n->sudo[j][i];
+         if(numeroFil != 0)
+         {
+            if(arregloBinarioFil[numeroFil] == 0)
+            {
+               arregloBinarioFil[numeroFil] = 1;
             }
-            row_check[i][num] = 1;
-
-            // Verificar columnas
-            if (col_check[j][num] == 1) {
-                return 0; // Número repetido en la misma columna
+            else
+            {
+               return 0;
             }
-            col_check[j][num] = 1;
-
-            // Calcular el índice de la submatriz y verificar
-            int submatrix_index = 3 * (i / 3) + (j / 3);
-            if (submatrix_check[submatrix_index][num] == 1) {
-                return 0; // Número repetido en la misma submatriz
+         }
+         if(numeroCol != 0)
+         {
+            if(arregloBinarioCol[numeroCol] == 0)
+            {
+               arregloBinarioCol[numeroCol] = 1;
             }
-            submatrix_check[submatrix_index][num] = 1;
-        }
-    }
-
-    return 1; // Estado válido
+            else
+            {
+               return 0;
+            }
+         }
+      }
+      for(int k = 0; k < 9; k++)
+      {
+         int l=3*(i/3) + (k/3);
+         int r=3*(i%3) + (k%3);
+         int num = n->sudo[l][r];
+         if(num != 0)
+         {
+            if(arregloBinarioSub[num] == 0)
+            {
+               arregloBinarioSub[num] = 1;
+            }
+            else
+            {
+               return 0;
+            }
+         }
+      }
+   }
+   
+   
+   return 1;
 }
-
 
 
 List* get_adj_nodes(Node* n)
